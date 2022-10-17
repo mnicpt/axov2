@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<head>
+    <script src="../zoid.min.js"></script>
+    <script src="../components/session.js"></script>
+    <style>
+        .hide {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <section>
+        <h1></h1>
+        <input id='email' type='text' placeholder='Email' />
+        <br/>
+        <button class='continue'>Continue</button>
+        <button class='logout'>Logout</button>
+    </section>
+    <script>
+        const { authenticated, prefilledEmail, onAuth, onProps } = window.xprops;
+
+        const heading = document.querySelector('h1');
+        const continueBtn = document.querySelector('.continue');
+        const logoutBtn = document.querySelector('.logout');
+        const emailInput = document.querySelector('#email');
+        const toggleView = (authenticated) => {
+            if (authenticated) {
+                heading.innerHTML = 'Member Email';
+                continueBtn.className = 'continue hide';
+                logoutBtn.className = 'logout';
+            } else {
+                heading.innerHTML = 'Guest Email';
+                continueBtn.className = 'continue';
+                logoutBtn.className = 'logout hide';
+            }
+        };
+        toggleView(authenticated);
+
+        emailInput.value = prefilledEmail && prefilledEmail.length > 0 ? prefilledEmail : '';
+        continueBtn.addEventListener('click', e => {
+            // call identity
+            onAuth({ authenticated: true });
+        });
+        logoutBtn.addEventListener('click', () => {
+            onAuth({ authenticated: false });
+        });
+
+        onProps((props) => {
+            const { authenticated } = props;
+            toggleView(authenticated);
+        });
+    </script>
+</body>
+</html>

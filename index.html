@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<head>
+    <title>Zoid / Web Components</title>
+    <script src="./zoid.min.js"></script>
+    <script src="./components/session.js"></script>
+
+    <script src="./ui/components/session.js"></script>
+    
+    <script defer src="./ui/components/email.js"></script>
+    <script defer src="./ui/components/payment.js"></script>
+    <script defer src="./ui/components/shipping.js"></script>
+    <style>
+        #email, #shipping, #payment {
+            height: 110px;
+            width: 400px;
+        }
+        .wrapper {
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="wc">
+            <h1>Web Components</h1>
+            <pp-email prefilledEmail='mnicpt@gmail.com'></pp-email>
+            <pp-shipping></pp-shipping>
+            <pp-payment></pp-payment>
+        </div>
+        <div class="zoid">
+            <h1>Zoid (JS SDK V5)</h1>
+            <section id="email"></section>
+            <section id="shipping"></section>
+            <section id="payment"></section>
+            <script>
+                const session = Session({
+                    onAuth: (data) => {
+                        console.log(`Session Authenticated: ${ data.authenticated }`);
+                    }
+                });
+                session.Email({
+                    prefilledEmail: 'mnicpt@gmail.com'
+                }).render('#email');
+                session.Shipping().render('#shipping');
+                session.Payment().render('#payment');
+            </script>
+        </div>
+    </div>
+</body>
+</html>

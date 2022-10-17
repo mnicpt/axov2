@@ -1,0 +1,110 @@
+<html>
+<head>
+
+<script>
+const paymentRequest = {
+    country: 'US',
+    currency: 'USD',
+    amount: {}
+};
+const session = paypal.Session({
+    authenticated,
+    paymentRequest,
+    style,
+    // protected
+    onLogout: () => {
+        children.forEach(child => {
+            paypal.postRobot.send(child, "onLogout", { authenticated }, { domain: "http://www.paypal.com" });
+        });
+    },
+    onAuth: (authenticated) => {
+        children.forEach(child => {
+            paypal.postRobot.send(child, "onAuth", { authenticated }, { domain: "http://www.paypal.com" });
+        });
+    },
+    Email: (props) => {
+
+    },
+    Shipping: (props) => {
+
+    },
+    Payment: (props) => {
+
+    },
+    Wallet: (props) => {
+
+    },
+    onError: (props) => {}
+});
+
+/**
+  *  Wallet Component
+  *  
+  *  Merchant has user id token and uses to provide a vaulted or apm button
+ */
+ const Wallet = session.Wallet({
+    wallet: 'paypal' | 'applepay' | 'googlepay',
+    onValidate: () => {},
+    onShippingAddressChange: () => {},
+    onShippingMethodChange: () => {},
+    onPayment: () => {}
+}).render('#paypalButton');
+
+/**
+  *  Email Component
+  *  
+  *  If we recognize user provide OTP, and go down member flow; otherwise, guest flow.
+  *  Responsible for accepting and recognizing user email, presenting and handling OTP, and providing proper access accordingly.
+ */
+const Email = session.Email({
+    onAuth: () => {},
+    onLogout: () => {}
+}).render('#email');
+
+/**
+  *  Shipping Component
+  *  
+  *  Show user shipping addresses and methods if provided; otherwise, show form for entry
+ */
+const Shipping = session.Shipping({
+    addresses: [],
+    methods: [],
+    onShippingAddressChange: () => {},
+    onShippingMethodChange: () => {},
+}).render('#shipping');
+
+const Payment = session.Payment({
+    onApprove: () => {},
+    onComplete: () => {},
+}).render('#payment');
+
+button.addEventListener('click', e => {
+    if (session.isValid()) { // if required components rendered and valid payment request, then valid
+        session.begin(); // starts flow based on wallet specified in paymentRequest
+    }
+});
+
+window.paypal = {
+    Wallet,
+    Email,
+    Session,
+    Payment
+};
+
+window.paypal.prototype = {
+    render(selector) {
+        document.querySelector(selector).innerHTML = 'Rendered...';
+    }
+};
+</script>
+
+</head>
+<body>
+    <div id="paypalButton"></div>
+    <div id="email"></div>
+    <div id="shipping"></div>
+    <div id="payment"></div>
+</body>
+</html>
+
+
