@@ -7,7 +7,7 @@ This repo shows options on how we can provide a componentized option for mid to 
 Zoid provides a familiar integration style with iframes communicating through post messaging.  For individual components to be integrated on the merchant site, we will need to render very fast.  Iframes don't afford is the fastest way to render but do provide a sandboxed area on the page.  Iframes, at this time, are required for the paywall. Minified zoid library is 99kb.
 
 ## Option 2: Web Components
-Web components provide a different way to integrate that allows the merchant to place an HTMLElement on their page. Web Components are supported across all modern browsers and do not require a library to be loaded. Web components also provide a sandboxed area on the page to prevent collisions with the merchant page when mode is set to closed.
+Web components provide a different way to integrate that allows the merchant to place an HTMLElement on their page. Web Components are supported across all modern browsers and do not require a library to be loaded. Web components also provide a sandboxed area on the page when mode is set to closed.
 
 ## Browser Support
 https://caniuse.com/?search=web%20components
