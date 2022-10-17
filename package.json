@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "http-server .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -12,5 +13,8 @@
     "belter": "^1.0.190",
     "jsx-pragmatic": "^2.0.22",
     "zoid": "^9.0.86"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1"
   }
 }
