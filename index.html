@@ -2,10 +2,10 @@
 <head>
     <title>Zoid / Web Components</title>
     <script src="./zoid.min.js"></script>
-    <script src="./components/session.js"></script>
+    <script src="./zoid/session.js"></script>
 
     <script src="./ui/components/session.js"></script>
-    
+
     <script defer src="./ui/components/email.js"></script>
     <script defer src="./ui/components/payment.js"></script>
     <script defer src="./ui/components/shipping.js"></script>
@@ -24,12 +24,12 @@
     <div class="wrapper">
         <div class="wc">
             <h1>Web Components</h1>
-            <pp-email prefilledEmail='mnicpt@gmail.com'></pp-email>
+            <pp-email prefilled='mnicpt@gmail.com'></pp-email>
             <pp-shipping></pp-shipping>
             <pp-payment></pp-payment>
         </div>
         <div class="zoid">
-            <h1>Zoid (JS SDK V5)</h1>
+            <h1>Zoid</h1>
             <section id="email"></section>
             <section id="shipping"></section>
             <section id="payment"></section>
@@ -40,7 +40,7 @@
                     }
                 });
                 session.Email({
-                    prefilledEmail: 'mnicpt@gmail.com'
+                    prefilled: 'mnicpt@gmail.com'
                 }).render('#email');
                 session.Shipping().render('#shipping');
                 session.Payment().render('#payment');

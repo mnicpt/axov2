@@ -20,7 +20,7 @@ class PPEmail extends PPSession {
 
     this.authToken = this.getAttribute('authToken') || '';
     this.clientToken = this.getAttribute('clientToken') || '';
-    this.prefilledEmail = this.getAttribute("prefilledEmail") || "";
+    this.prefilledEmail = this.getAttribute("prefilled") || "";
 
     this.shadow = this.attachShadow({ mode: 'closed' });
 

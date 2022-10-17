@@ -1,17 +1,16 @@
 <!DOCTYPE html>
 <head>
     <script src="../zoid.min.js"></script>
-    <script src="../components/session.js"></script>
+    <script src="../zoid/session.js"></script>
 </head>
 <body>
         <section>
             <h1></h1>
         </section>
         <script>
-            const { authenticated, onProps } = window.xprops;
+            const { authenticated, onProps } = window.xprops || {};
 
             const heading = document.querySelector('h1');
-
             heading.innerHTML = authenticated ? 'Member Shipping' : 'Guest Shipping';
 
             onProps((props) => {
