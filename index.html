@@ -4,11 +4,11 @@
     <script src="./zoid.min.js"></script>
     <script src="./zoid/session.js"></script>
 
-    <script src="./ui/components/session.js"></script>
-
-    <script defer src="./ui/components/email.js"></script>
-    <script defer src="./ui/components/payment.js"></script>
-    <script defer src="./ui/components/shipping.js"></script>
+    
+    <!-- <script src="./components/wc-session.js"></script>
+        <script src="./components/wc-email.js"></script>
+        <script src="./components/wc-shipping.js"></script>
+        <script src="./components/wc-payment.js"></script> -->
     <style>
         #email, #shipping, #payment {
             height: 110px;
@@ -16,7 +16,7 @@
         }
         .wrapper {
             display: flex;
-            justify-content: space-between;
+            justify-content: space-around;
         }
     </style>
 </head>
@@ -24,9 +24,9 @@
     <div class="wrapper">
         <div class="wc">
             <h1>Web Components</h1>
-            <pp-email prefilled='mnicpt@gmail.com'></pp-email>
-            <pp-shipping></pp-shipping>
-            <pp-payment></pp-payment>
+            <paypal-email authenticated='false' prefilled='mnicpt@gmail.com'></paypal-email>
+            <paypal-shipping authenticated='false'></paypal-shipping>
+            <paypal-payment authenticated='false'></paypal-payment>
         </div>
         <div class="zoid">
             <h1>Zoid</h1>
@@ -47,5 +47,8 @@
             </script>
         </div>
     </div>
+    <script type="module" src="./ui/components/email/index.js"></script>
+    <script type="module" src="./ui/components/payment/index.js"></script>
+    <script type="module" src="./ui/components/shipping/index.js"></script>
 </body>
 </html>

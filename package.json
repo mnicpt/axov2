@@ -11,10 +11,14 @@
   "license": "ISC",
   "dependencies": {
     "belter": "^1.0.190",
+    "handlebars": "^4.7.7",
     "jsx-pragmatic": "^2.0.22",
+    "preact": "^10.11.2",
+    "preact-custom-element": "^4.2.1",
     "zoid": "^9.0.86"
   },
   "devDependencies": {
-    "http-server": "^14.1.1"
+    "http-server": "^14.1.1",
+    "webpack-cli": "^4.10.0"
   }
 }
