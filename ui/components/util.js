@@ -1,11 +1,14 @@
 import { h, cloneElement, render, hydrate } from 'https://unpkg.com/preact@latest?module';
 
-export default function register(Component, tagName, propNames, options) {
+export let components = {};
+export const register = (Component, tagName, propNames, options) => {
 	function PreactElement() {
 		const inst = Reflect.construct(HTMLElement, [], PreactElement);
 		inst._vdomComponent = Component;
 		inst._root =
 			options && options.shadow ? inst.attachShadow({ mode: 'closed' }) : inst;
+    
+    components[tagName] = inst;
 		return inst;
 	}
 	PreactElement.prototype = Object.create(HTMLElement.prototype);
@@ -48,12 +51,12 @@ export default function register(Component, tagName, propNames, options) {
 			},
 		});
 	});
-
+  
 	return customElements.define(
 		tagName || Component.tagName || Component.displayName || Component.name,
 		PreactElement
 	);
-}
+};
 
 function ContextProvider(props) {
 	this.getChildContext = () => props.context;

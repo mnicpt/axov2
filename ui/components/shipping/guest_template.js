@@ -1,10 +1,10 @@
 import { html } from 'https://unpkg.com/htm/preact/index.mjs?module';
 
-const guestTemplate = (styles) => (html`
+const guestTemplate = ({ ref }, styles) => (html`
   <style>
     ${ styles }
   </style>
-  <section>
+  <section ref=${ref}>
       <h1>Shipping Guest</h1>
   </section>
 `);

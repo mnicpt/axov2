@@ -1,10 +1,10 @@
 import { html } from 'https://unpkg.com/htm/preact/index.mjs?module';
 
-const memberTemplate = (styles) => (html`
+const memberTemplate = ({ ref }, styles) => (html`
   <style>
     ${ styles }
   </style>
-  <section>
+  <section ref=${ref}>
       <h1>Payment Member</h1>
   </section>
 `);

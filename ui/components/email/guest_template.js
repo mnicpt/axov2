@@ -1,10 +1,10 @@
 import { html } from 'https://unpkg.com/htm/preact/index.mjs?module';
 
-const guestTemplate = ({ email, onEmailChange, onLogin, onLogout }, styles) => (html`
+const guestTemplate = ({ email, onEmailChange, onLogin, ref }, styles) => (html`
   <style>
     ${ styles }
   </style>
-  <section>
+  <section ref=${ref}>
       <h1>Email Guest</h1>
       <input id='pp-email' type='text' placeholder='Email' onChange=${onEmailChange}value='${ email }' />
       <br/>
