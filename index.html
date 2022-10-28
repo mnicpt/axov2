@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <head>
     <title>Zoid / Web Components</title>
-    <script src="./zoid.min.js"></script>
+    <script type="module" src="https://unpkg.com/preact@latest/hooks/dist/hooks.module.js?module"></script>
+
+    <script type="module" src="./ui/components/email/index.js"></script>
+    <script type="module" src="./ui/components/payment/index.js"></script>
+    <script type="module" src="./ui/components/shipping/index.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/zoid/9.0.87/zoid.min.js"></script>
     <script src="./zoid/session.js"></script>
 
-    
-    <!-- <script src="./components/wc-session.js"></script>
-        <script src="./components/wc-email.js"></script>
-        <script src="./components/wc-shipping.js"></script>
-        <script src="./components/wc-payment.js"></script> -->
     <style>
+        body {
+            font-family: 'Courier New', Courier, monospace;
+        }
         #email, #shipping, #payment {
             height: 110px;
             width: 400px;
@@ -24,9 +28,9 @@
     <div class="wrapper">
         <div class="wc">
             <h1>Web Components</h1>
-            <paypal-email authenticated='false' prefilled='mnicpt@gmail.com'></paypal-email>
-            <paypal-shipping authenticated='false'></paypal-shipping>
-            <paypal-payment authenticated='false'></paypal-payment>
+            <paypal-email token='full_scoped_client_token' prefilled='mnicpt@gmail.com'></paypal-email>
+            <paypal-shipping></paypal-shipping>
+            <paypal-payment></paypal-payment>
         </div>
         <div class="zoid">
             <h1>Zoid</h1>
@@ -47,8 +51,5 @@
             </script>
         </div>
     </div>
-    <script type="module" src="./ui/components/email/index.js"></script>
-    <script type="module" src="./ui/components/payment/index.js"></script>
-    <script type="module" src="./ui/components/shipping/index.js"></script>
 </body>
 </html>
