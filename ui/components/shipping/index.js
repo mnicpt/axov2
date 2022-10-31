@@ -3,20 +3,20 @@ import { useEffect, useState } from "https://unpkg.com/preact@latest/hooks/dist/
 import defaultStyles from "./styles.js";
 import guestTemplate from "./guest_template.js";
 import memberTemplate from "./member_template.js";
-import { components, register } from '../util.js';
-import { getState, setState } from '../../utils/state.js';
+import { components, register, getState, setState } from '../util.js';
 
 const Shipping = ({ styles }) => {
   const ref = components['paypal-payment'];
   const [auth, setAuth] = useState(getState('authenticated') === 'true');
 
   useEffect(() => {
-    ref.addEventListener("onAuth", function authEvent(e) {
-      setAuth(getState('authenticated') === 'true');
+    ref.addEventListener("stateChanged", function authEvent(e) {
+      const { authenticated } = e.detail;
+      setAuth(authenticated);
     });
 
     return () => {
-      ref.removeEventListener('onAuth', authEvent);
+      ref.removeEventListener('stateChanged', authEvent);
     };
   }, []);
 

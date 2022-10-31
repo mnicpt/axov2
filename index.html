@@ -31,6 +31,12 @@
             <paypal-email token='full_scoped_client_token' prefilled='mnicpt@gmail.com'></paypal-email>
             <paypal-shipping></paypal-shipping>
             <paypal-payment></paypal-payment>
+            <script>
+                document.querySelector('paypal-email').addEventListener('onAuth', e => {
+                    const { authenticated } = e.detail;
+                    // store if not blocked, else pass values along in query param if components across pages
+                });
+            </script>
         </div>
         <div class="zoid">
             <h1>Zoid</h1>

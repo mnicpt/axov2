@@ -3,42 +3,19 @@ import { useEffect, useState } from 'https://unpkg.com/preact@latest/hooks/dist/
 import defaultStyles from './styles.js';
 import guestTemplate from "./guest_template.js";
 import memberTemplate from "./member_template.js";
-import { components, register } from '../util.js';
-import { getState, setState } from '../../utils/state.js';
+import { components, register, getState, setState } from '../util.js';
 
-const Email = ({ token, prefilled, styles }) => {
+const Email = ({ authenticated, token, prefilled, styles }) => {
   const ref = components['paypal-email'];
-  const [ auth, setAuth ] = useState(getState('authenticated') === 'true');
-  const [ email, setEmail ] = useState(getState('email') || prefilled);
+
+  const [ auth, setAuth ] = useState(authenticated);
+  const [ email, setEmail ] = useState(prefilled);
   const [ loading, setLoading ] = useState(false);
-
-  const authEvent = new CustomEvent('onAuth', {
-    bubbles: false,
-		cancelable: false,
-    detail: {
-      authenticated: auth,
-      token
-    }
-  });
-
-  useEffect(() => {
-    Object.keys(components).forEach(componentName => {
-      if (componentName !== 'paypal-email') {
-        components[componentName].dispatchEvent(authEvent);
-      }
-    });
-
-    return () => {
-      Object.keys(components).forEach(componentName => {
-        components[componentName].removeEventListener('onAuth', authEvent);
-      });
-    };
-  });
 
   const onEmailChange = (e) => {
     const email = e.target.value;
     setEmail(email);
-    setState('email', email);
+    setState(ref, 'prefilled', email);
   };
 
   const onLogin = async () => {
@@ -49,23 +26,15 @@ const Email = ({ token, prefilled, styles }) => {
 
     setLoading(false);
 
+    // local state
     setAuth(true);
-    setState('authenticated', true);
-    Object.keys(components).forEach(componentName => {
-      if (componentName !== 'paypal-email') {
-        components[componentName].dispatchEvent(authEvent);
-      }
-    });
+    // global state, event, dom sync
+    setState(ref, 'authenticated', true);
   };
 
   const onLogout = () => {
     setAuth(false);
-    setState('authenticated', false);
-    Object.keys(components).forEach(componentName => {
-      if (componentName !== 'paypal-email') {
-        components[componentName].dispatchEvent(authEvent);
-      }
-    });
+    setState(ref, 'authenticated', false);
   };
   
   if (loading) {

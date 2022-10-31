@@ -27,9 +27,11 @@ export const register = (Component, tagName, propNames, options) => {
 	propNames.forEach((name) => {
 		Object.defineProperty(PreactElement.prototype, name, {
 			get() {
+        console.debug(`Getting ${ name }.`);
 				return this._vdom.props[name];
 			},
 			set(v) {
+        console.debug(`Setting ${ name } to ${v}.`);
 				if (this._vdom) {
 					this.attributeChangedCallback(name, null, v);
 				} else {
@@ -164,3 +166,39 @@ function toVdom(element, nodeName) {
 	const wrappedChildren = nodeName ? h(Slot, null, children) : children;
 	return h(nodeName || element.nodeName.toLowerCase(), props, wrappedChildren);
 }
+
+const storageAPIEnabled = () => {
+  try {
+    window.sessionStorage.setItem;
+    return true;
+  } catch(err) {
+    return false;
+  }
+};
+
+export const getState = (ref, key) => {
+  if (storageAPIEnabled()) {
+    return window.sessionStorage.getItem(key);
+  } else {
+    return ref[key];
+  }
+};
+
+export const setState = (ref, key, value) => {
+  const stateChangedEvent = new CustomEvent('stateChanged', {
+    bubbles: true,
+    cancelable: true,
+    detail: {
+      [key]: value
+    }
+  });
+  Object.keys(components).forEach(componentName => {
+      components[componentName].dispatchEvent(stateChangedEvent);
+  });
+
+  if (storageAPIEnabled()) {
+    window.sessionStorage.setItem(key, value);
+  } else {
+    ref[key] = value;
+  }
+};
