@@ -8,7 +8,7 @@ import { components, register, getState, setState } from '../util.js';
 const Email = ({ authenticated, token, prefilled, styles }) => {
   const ref = components['paypal-email'];
 
-  const [ auth, setAuth ] = useState(authenticated);
+  const [ auth, setAuth ] = useState(authenticated === 'true');
   const [ email, setEmail ] = useState(prefilled);
   const [ loading, setLoading ] = useState(false);
 

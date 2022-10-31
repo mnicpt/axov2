@@ -185,7 +185,7 @@ export const getState = (ref, key) => {
 };
 
 export const setState = (ref, key, value) => {
-  const stateChangedEvent = new CustomEvent('stateChanged', {
+  const stateChangedEvent = new CustomEvent(`on${key[0].toUpperCase() + key.substring(1)}`, {
     bubbles: true,
     cancelable: true,
     detail: {

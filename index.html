@@ -32,8 +32,9 @@
             <paypal-shipping></paypal-shipping>
             <paypal-payment></paypal-payment>
             <script>
-                document.querySelector('paypal-email').addEventListener('onAuth', e => {
+                document.querySelector('paypal-email').addEventListener('onAuthenticated', e => {
                     const { authenticated } = e.detail;
+                    console.log(`Merchant onAuthenticated listener.`);
                     // store if not blocked, else pass values along in query param if components across pages
                 });
             </script>
