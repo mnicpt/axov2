@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<head>
+    <title>Zoid / Web Components</title>
+    <script type="module" src="https://unpkg.com/preact@latest/hooks/dist/hooks.module.js?module"></script>
+
+    <script type="module" src="./ui/components/payment/index.js"></script>
+    <script type="module" src="./ui/components/shipping/index.js"></script>
+
+    <style>
+        body {
+            font-family: 'Courier New', Courier, monospace;
+        }
+        #email, #shipping, #payment {
+            height: 110px;
+            width: 400px;
+        }
+        .wrapper {
+            display: flex;
+            justify-content: space-around;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="wc">
+            <h1>Web Components</h1>
+            <paypal-shipping></paypal-shipping>
+            <paypal-payment></paypal-payment>
+        </div>
+    </div>
+</body>
+</html>
