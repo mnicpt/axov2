@@ -9,26 +9,25 @@ import memberTemplate from "./member_template.js";
 import { components, register, getState, setState } from "../util.js";
 
 const Shipping = ({ authToken, styles }) => {
-  const ref = components["paypal-payment"];
-  const [auth, setAuth] = useState(authToken || getState(ref, 'authToken'));
+  const ref = components["paypal-shipping"];
 
   useEffect(() => {
-    ref.addEventListener("authTokenChanged", function authEvent(e) {
+    ref.addEventListener("AuthTokenChanged", function authEvent(e) {
       const { authToken } = e.detail;
-      setAuth(authToken);
+      ref['auth-token'] = authToken;
     });
 
     return () => {
-      ref.removeEventListener("authTokenChanged", authEvent);
+      ref.removeEventListener("AuthTokenChanged", authEvent);
     };
   }, []);
 
-  return auth
+  return authToken
     ? memberTemplate({ ref }, styles || defaultStyles)
     : guestTemplate({ ref }, styles || defaultStyles);
 };
 
-register(Shipping, "paypal-shipping", ["authenticated", "authToken"], {
+register(Shipping, "paypal-shipping", ["auth-token"], {
   shadow: true,
 });
 

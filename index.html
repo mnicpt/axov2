@@ -36,12 +36,14 @@
             <h1>Web Components</h1>
             <paypal-email clientToken='full_scoped_client_token' prefilled='mnicpt@gmail.com'></paypal-email>
             <script>
-                document.querySelector('paypal-email').addEventListener('authTokenChanged', e => {
+                document.querySelector('paypal-email').addEventListener('AuthTokenChanged', e => {
                     const { authToken } = e.detail;
                     console.log(`Merchant onAuthenticated listener.`);
                     // store if not blocked, else pass values along in query param if components across pages
                 });
             </script>
+            <paypal-shipping></paypal-shipping>
+            <paypal-payment></paypal-payment>
             <button class='continue page2'>Go to Page 2</button>
             <script>
                 document.querySelector('.continue.page2').addEventListener('click', () => {

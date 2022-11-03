@@ -9,12 +9,10 @@ const Email = ({ clientToken, prefilled, styles }) => {
   const ref = components['paypal-email'];
 
   const [ authToken, setAuthToken ] = useState(getState(ref, 'authToken'));
-  const [ email, setEmail ] = useState(prefilled);
   const [ loading, setLoading ] = useState(false);
 
   const onEmailChange = (e) => {
     const email = e.target.value;
-    setEmail(email);
     setState(ref, 'prefilled', email);
   };
 
@@ -42,8 +40,8 @@ const Email = ({ clientToken, prefilled, styles }) => {
   }
 
   return authToken
-    ? memberTemplate({ email, onLogout, ref }, styles || defaultStyles)
-    : guestTemplate({ email, onEmailChange, onLogin, ref }, styles || defaultStyles);
+    ? memberTemplate({ prefilled, onLogout, ref }, styles || defaultStyles)
+    : guestTemplate({ prefilled, onEmailChange, onLogin, ref }, styles || defaultStyles);
 };
 
 register(Email, 'paypal-email', ['clientToken', 'prefilled'], { shadow: true });

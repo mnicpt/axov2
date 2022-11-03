@@ -1,11 +1,13 @@
 import { h, cloneElement, render, hydrate } from 'https://unpkg.com/preact@latest?module';
 import { isSecure } from './security.js';
 
+// closures to prevent hackery
 const _shadows = new WeakMap();
 const _vdoms = new WeakMap();
 const _vdomComponents = new WeakMap();
 
-export let components = {};
+// closure to track all registerd components
+export const components = {};
 export const register = (Component, tagName, propNames, options) => {
 	if (!isSecure()) {
 		console.error('Cannot override attachShadow when using PayPal Web Components.');
@@ -20,6 +22,7 @@ export const register = (Component, tagName, propNames, options) => {
     components[tagName] = inst;
 		return inst;
 	}
+
 	PreactElement.prototype = Object.create(HTMLElement.prototype);
 	PreactElement.prototype.constructor = PreactElement;
 	PreactElement.prototype.connectedCallback = connectedCallback;
@@ -37,7 +40,7 @@ export const register = (Component, tagName, propNames, options) => {
 		Object.defineProperty(PreactElement.prototype, name, {
 			get() {
         console.debug(`Getting ${ name }.`);
-				return _vdoms.get(this).props[name];
+				return _vdoms.get(this).props[name] || this.getAttribute(name);
 			},
 			set(v) {
         console.debug(`Setting ${ name } to ${v}.`);
@@ -95,11 +98,7 @@ function connectedCallback() {
 		{ ...this._props, context },
 		toVdom(this, _vdomComponents.get(this))
 	));
-	// this._vdom = h(
-	// 	ContextProvider,
-	// 	{ ...this._props, context },
-	// 	toVdom(this, _vdomComponents.get(this))
-	// );
+
 	(this.hasAttribute('hydrate') ? hydrate : render)(_vdoms.get(this), _shadows.get(this));
 }
 
@@ -118,6 +117,7 @@ function attributeChangedCallback(name, oldValue, newValue) {
 	props[name] = newValue;
 	props[toCamelCase(name)] = newValue;
 	_vdoms.set(this, cloneElement(_vdoms.get(this), props));
+
 	render(_vdoms.get(this), _shadows.get(this));
 }
 
@@ -199,13 +199,15 @@ export const getState = (ref, key) => {
 };
 
 export const setState = (ref, key, value) => {
-  const stateChangedEvent = new CustomEvent(`${key[0].toUpperCase() + key.substring(1)}Changed`, {
+	const eventName = `${key[0].toUpperCase() + key.substring(1)}Changed`;
+  const stateChangedEvent = new CustomEvent(eventName, {
     bubbles: true,
     cancelable: true,
     detail: {
       [key]: value
     }
   });
+
   Object.keys(components).forEach(componentName => {
       components[componentName].dispatchEvent(stateChangedEvent);
   });

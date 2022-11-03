@@ -7,24 +7,23 @@ import { components, register, getState, setState } from '../util.js';
 
 const Payment = ({ authToken, styles }) => {
   const ref = components['paypal-payment'];
-  const [auth, setAuth] = useState(authToken || getState(ref, 'authToken'));
 
   useEffect(() => {
-    ref.addEventListener("authTokenChanged", function authEvent(e) {
+    ref.addEventListener("AuthTokenChanged", function authEvent(e) {
       const { authToken } = e.detail;
-      setAuth(authToken);
+      ref['auth-token'] = authToken;
     });
 
     return () => {
-      ref.removeEventListener('authTokenChanged', authEvent);
+      ref.removeEventListener('AuthTokenChanged', authEvent);
     };
   }, []);
 
-  return auth
+  return authToken
     ? memberTemplate({ ref }, styles || defaultStyles)
     : guestTemplate({ ref }, styles || defaultStyles);
 };
 
-register(Payment, "paypal-payment", ["authenticated", "authToken"], { shadow: true });
+register(Payment, "paypal-payment", ["auth-token"], { shadow: true });
 
 export default Payment;
