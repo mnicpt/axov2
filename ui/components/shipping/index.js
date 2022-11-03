@@ -1,22 +1,25 @@
-import { useEffect, useState } from "https://unpkg.com/preact@latest/hooks/dist/hooks.module.js?module";
+import {
+  useEffect,
+  useState,
+} from "https://unpkg.com/preact@latest/hooks/dist/hooks.module.js?module";
 
 import defaultStyles from "./styles.js";
 import guestTemplate from "./guest_template.js";
 import memberTemplate from "./member_template.js";
-import { components, register, getState, setState } from '../util.js';
+import { components, register, getState, setState } from "../util.js";
 
-const Shipping = ({ authenticated, styles }) => {
-  const ref = components['paypal-payment'];
-  const [auth, setAuth] = useState(authenticated === 'true');
+const Shipping = ({ authToken, styles }) => {
+  const ref = components["paypal-payment"];
+  const [auth, setAuth] = useState(authToken || getState(ref, 'authToken'));
 
   useEffect(() => {
-    ref.addEventListener("onAuthenticated", function authEvent(e) {
-      const { authenticated } = e.detail;
-      setAuth(authenticated);
+    ref.addEventListener("authTokenChanged", function authEvent(e) {
+      const { authToken } = e.detail;
+      setAuth(authToken);
     });
 
     return () => {
-      ref.removeEventListener('onAuthenticated', authEvent);
+      ref.removeEventListener("authTokenChanged", authEvent);
     };
   }, []);
 
@@ -25,6 +28,8 @@ const Shipping = ({ authenticated, styles }) => {
     : guestTemplate({ ref }, styles || defaultStyles);
 };
 
-register(Shipping, "paypal-shipping", ["authenticated"], { shadow: true });
+register(Shipping, "paypal-shipping", ["authenticated", "authToken"], {
+  shadow: true,
+});
 
 export default Shipping;

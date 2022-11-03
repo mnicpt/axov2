@@ -5,18 +5,18 @@ import guestTemplate from "./guest_template.js";
 import memberTemplate from "./member_template.js";
 import { components, register, getState, setState } from '../util.js';
 
-const Payment = ({ authenticated, styles }) => {
+const Payment = ({ authToken, styles }) => {
   const ref = components['paypal-payment'];
-  const [auth, setAuth] = useState(authenticated === 'true');
+  const [auth, setAuth] = useState(authToken || getState(ref, 'authToken'));
 
   useEffect(() => {
-    ref.addEventListener("onAuthenticated", function authEvent(e) {
-      const { authenticated } = e.detail;
-      setAuth(authenticated);
+    ref.addEventListener("authTokenChanged", function authEvent(e) {
+      const { authToken } = e.detail;
+      setAuth(authToken);
     });
 
     return () => {
-      ref.removeEventListener('onAuthenticated', authEvent);
+      ref.removeEventListener('authTokenChanged', authEvent);
     };
   }, []);
 
@@ -25,6 +25,6 @@ const Payment = ({ authenticated, styles }) => {
     : guestTemplate({ ref }, styles || defaultStyles);
 };
 
-register(Payment, "paypal-payment", ["authenticated"], { shadow: true });
+register(Payment, "paypal-payment", ["authenticated", "authToken"], { shadow: true });
 
 export default Payment;

@@ -9,6 +9,12 @@
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/zoid/9.0.87/zoid.min.js"></script>
     <script src="./zoid/session.js"></script>
+    <!-- <script>
+        Element.prototype._attachShadow = Element.prototype.attachShadow;
+        Element.prototype.attachShadow = function () {
+            return this._attachShadow( { mode: "open" } );
+        };
+    </script> -->
 
     <style>
         body {
@@ -28,14 +34,18 @@
     <div class="wrapper">
         <div class="wc">
             <h1>Web Components</h1>
-            <paypal-email token='full_scoped_client_token' prefilled='mnicpt@gmail.com'></paypal-email>
-            <paypal-shipping></paypal-shipping>
-            <paypal-payment></paypal-payment>
+            <paypal-email clientToken='full_scoped_client_token' prefilled='mnicpt@gmail.com'></paypal-email>
             <script>
-                document.querySelector('paypal-email').addEventListener('onAuthenticated', e => {
-                    const { authenticated } = e.detail;
+                document.querySelector('paypal-email').addEventListener('authTokenChanged', e => {
+                    const { authToken } = e.detail;
                     console.log(`Merchant onAuthenticated listener.`);
                     // store if not blocked, else pass values along in query param if components across pages
+                });
+            </script>
+            <button class='continue page2'>Go to Page 2</button>
+            <script>
+                document.querySelector('.continue.page2').addEventListener('click', () => {
+                    location.href = 'http://localhost:8080/index2.html';
                 });
             </script>
         </div>

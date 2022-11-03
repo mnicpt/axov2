@@ -1,12 +1,21 @@
 import { h, cloneElement, render, hydrate } from 'https://unpkg.com/preact@latest?module';
+import { isSecure } from './security.js';
+
+const _shadows = new WeakMap();
+const _vdoms = new WeakMap();
+const _vdomComponents = new WeakMap();
 
 export let components = {};
 export const register = (Component, tagName, propNames, options) => {
+	if (!isSecure()) {
+		console.error('Cannot override attachShadow when using PayPal Web Components.');
+		return;
+	}
+
 	function PreactElement() {
 		const inst = Reflect.construct(HTMLElement, [], PreactElement);
-		inst._vdomComponent = Component;
-		inst._root =
-			options && options.shadow ? inst.attachShadow({ mode: 'closed' }) : inst;
+		_vdomComponents.set(inst, Component);
+		_shadows.set(inst, options && options.shadow ? inst.attachShadow({ mode: 'closed' }) : inst);
     
     components[tagName] = inst;
 		return inst;
@@ -28,11 +37,11 @@ export const register = (Component, tagName, propNames, options) => {
 		Object.defineProperty(PreactElement.prototype, name, {
 			get() {
         console.debug(`Getting ${ name }.`);
-				return this._vdom.props[name];
+				return _vdoms.get(this).props[name];
 			},
 			set(v) {
         console.debug(`Setting ${ name } to ${v}.`);
-				if (this._vdom) {
+				if (_vdoms.get(this)) {
 					this.attributeChangedCallback(name, null, v);
 				} else {
 					if (!this._props) this._props = {};
@@ -81,12 +90,17 @@ function connectedCallback() {
 	this.dispatchEvent(event);
 	const context = event.detail.context;
 
-	this._vdom = h(
+	_vdoms.set(this, h(
 		ContextProvider,
 		{ ...this._props, context },
-		toVdom(this, this._vdomComponent)
-	);
-	(this.hasAttribute('hydrate') ? hydrate : render)(this._vdom, this._root);
+		toVdom(this, _vdomComponents.get(this))
+	));
+	// this._vdom = h(
+	// 	ContextProvider,
+	// 	{ ...this._props, context },
+	// 	toVdom(this, _vdomComponents.get(this))
+	// );
+	(this.hasAttribute('hydrate') ? hydrate : render)(_vdoms.get(this), _shadows.get(this));
 }
 
 function toCamelCase(str) {
@@ -94,7 +108,7 @@ function toCamelCase(str) {
 }
 
 function attributeChangedCallback(name, oldValue, newValue) {
-	if (!this._vdom) return;
+	if (!_vdoms.get(this)) return;
 	// Attributes use `null` as an empty value whereas `undefined` is more
 	// common in pure JS components, especially with default parameters.
 	// When calling `node.removeAttribute()` we'll receive `null` as the new
@@ -103,12 +117,12 @@ function attributeChangedCallback(name, oldValue, newValue) {
 	const props = {};
 	props[name] = newValue;
 	props[toCamelCase(name)] = newValue;
-	this._vdom = cloneElement(this._vdom, props);
-	render(this._vdom, this._root);
+	_vdoms.set(this, cloneElement(_vdoms.get(this), props));
+	render(_vdoms.get(this), _shadows.get(this));
 }
 
 function disconnectedCallback() {
-	render((this._vdom = null), this._root);
+	render((_vdoms.set(this, null)), _shadows.get(this));
 }
 
 /**
@@ -185,7 +199,7 @@ export const getState = (ref, key) => {
 };
 
 export const setState = (ref, key, value) => {
-  const stateChangedEvent = new CustomEvent(`on${key[0].toUpperCase() + key.substring(1)}`, {
+  const stateChangedEvent = new CustomEvent(`${key[0].toUpperCase() + key.substring(1)}Changed`, {
     bubbles: true,
     cancelable: true,
     detail: {
@@ -198,7 +212,6 @@ export const setState = (ref, key, value) => {
 
   if (storageAPIEnabled()) {
     window.sessionStorage.setItem(key, value);
-  } else {
-    ref[key] = value;
   }
+  ref[key] = value;
 };
