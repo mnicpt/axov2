@@ -35,7 +35,7 @@
         <div class="wc">
             <h1>Web Components</h1>
             <paypal-email prefilled='mnicpt@gmail.com'></paypal-email>
-            <script>
+            <script defer>
                 const emailComponent = document.querySelector('paypal-email');
                 emailComponent.addEventListener('AuthTokenChanged', e => {
                     const { authToken } = e.detail;
