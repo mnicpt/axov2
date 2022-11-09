@@ -35,16 +35,16 @@
         <div class="wc">
             <h1>Web Components</h1>
             <paypal-email prefilled='mnicpt@gmail.com'></paypal-email>
-            <script defer>
+            <script>
                 const emailComponent = document.querySelector('paypal-email');
                 emailComponent.addEventListener('AuthTokenChanged', e => {
                     const { authToken } = e.detail;
                     console.log(`Merchant onAuthenticated listener.`);
                     // store if not blocked, else pass values along in query param if components across pages
                 });
-                emailComponent.onLogin = () => {
+                emailComponent.setAttribute('onLogin', () => {
                     console.log('override');
-                };
+                });
             </script>
             <paypal-shipping>
             </paypal-shipping>
