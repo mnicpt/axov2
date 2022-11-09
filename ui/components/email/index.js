@@ -5,18 +5,18 @@ import guestTemplate from "./guest_template.js";
 import memberTemplate from "./member_template.js";
 import { components, register, getState, setState } from '../util.js';
 
-const Email = ({ clientToken, prefilled, styles }) => {
-  const ref = components['paypal-email'];
-
-  const [ authToken, setAuthToken ] = useState(getState(ref, 'authToken'));
+const Email = ({ clientToken, prefilled, styles, onLogin: loginOverride }) => {
+  const [ authToken, setAuthToken ] = useState(getState('auth-token') || '');
   const [ loading, setLoading ] = useState(false);
 
   const onEmailChange = (e) => {
     const email = e.target.value;
-    setState(ref, 'prefilled', email);
+    setState('prefilled', email);
   };
 
-  const onLogin = async () => {
+  const onLogin = loginOverride
+    ? loginOverride
+    : async () => {
     setLoading(true);
 
     const response = await fetch('https://api.ipify.org?format=json');
@@ -27,12 +27,12 @@ const Email = ({ clientToken, prefilled, styles }) => {
     // set local state
     setAuthToken(ip);
     // global state, event, dom sync
-    setState(ref, 'authToken', ip);
+    setState('auth-token', ip);
   };
 
   const onLogout = () => {
     setAuthToken('');
-    setState(ref, 'authToken', '');
+    setState('auth-token', '');
   };
   
   if (loading) {
@@ -40,10 +40,10 @@ const Email = ({ clientToken, prefilled, styles }) => {
   }
 
   return authToken
-    ? memberTemplate({ prefilled, onLogout, ref }, styles || defaultStyles)
-    : guestTemplate({ prefilled, onEmailChange, onLogin, ref }, styles || defaultStyles);
+    ? memberTemplate({ prefilled, onLogout }, styles || defaultStyles)
+    : guestTemplate({ prefilled, onEmailChange, onLogin }, styles || defaultStyles);
 };
 
-register(Email, 'paypal-email', ['clientToken', 'prefilled'], { shadow: true });
+register(Email, 'paypal-email', ['clientToken', 'prefilled', 'onLogin'], { shadow: true });
 
 export default Email;

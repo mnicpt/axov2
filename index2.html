@@ -26,11 +26,11 @@
             <h1>Web Components</h1>
             <paypal-shipping></paypal-shipping>
             <script>
-                document.querySelector('paypal-shipping').setAttribute('auth-token', sessionStorage.getItem('authToken'));
+                document.querySelector('paypal-shipping').setAttribute('auth-token', sessionStorage.getItem('auth-token'));
             </script>
             <paypal-payment></paypal-payment>
             <script>
-                document.querySelector('paypal-payment').setAttribute('auth-token', sessionStorage.getItem('authToken'));
+                document.querySelector('paypal-payment').setAttribute('auth-token', sessionStorage.getItem('auth-token'));
             </script>
         </div>
     </div>

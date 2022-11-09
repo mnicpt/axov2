@@ -1,10 +1,10 @@
 import { html } from 'https://unpkg.com/htm/preact/index.mjs?module';
 
-const memberTemplate = ({ prefilled, onLogout, ref }, styles) => (html`
+const memberTemplate = ({ prefilled, onLogout }, styles) => (html`
   <style>
     ${ styles }
   </style>
-  <section ref=${ref}>
+  <section>
       <h1>Email Member</h1>
       <b>Email: ${ prefilled }</b>
       <br/>

@@ -190,15 +190,13 @@ const storageAPIEnabled = () => {
   }
 };
 
-export const getState = (ref, key) => {
+export const getState = (key) => {
   if (storageAPIEnabled()) {
     return window.sessionStorage.getItem(key);
-  } else {
-    return ref[key];
   }
 };
 
-export const setState = (ref, key, value) => {
+export const setState = (key, value) => {
 	const eventName = `${key[0].toUpperCase() + key.substring(1)}Changed`;
   const stateChangedEvent = new CustomEvent(eventName, {
     bubbles: true,
@@ -207,13 +205,13 @@ export const setState = (ref, key, value) => {
       [key]: value
     }
   });
+	
+	if (storageAPIEnabled()) {
+		window.sessionStorage.setItem(key, value);
+	}
 
   Object.keys(components).forEach(componentName => {
       components[componentName].dispatchEvent(stateChangedEvent);
+			components[componentName][key] = value;
   });
-
-  if (storageAPIEnabled()) {
-    window.sessionStorage.setItem(key, value);
-  }
-  ref[key] = value;
 };

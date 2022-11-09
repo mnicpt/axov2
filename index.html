@@ -6,7 +6,7 @@
     <script type="module" src="./ui/components/email/index.js"></script>
     <script type="module" src="./ui/components/payment/index.js"></script>
     <script type="module" src="./ui/components/shipping/index.js"></script>
-    
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/zoid/9.0.87/zoid.min.js"></script>
     <script src="./zoid/session.js"></script>
     <!-- <script>
@@ -34,15 +34,20 @@
     <div class="wrapper">
         <div class="wc">
             <h1>Web Components</h1>
-            <paypal-email clientToken='full_scoped_client_token' prefilled='mnicpt@gmail.com'></paypal-email>
+            <paypal-email prefilled='mnicpt@gmail.com'></paypal-email>
             <script>
-                document.querySelector('paypal-email').addEventListener('AuthTokenChanged', e => {
+                const emailComponent = document.querySelector('paypal-email');
+                emailComponent.addEventListener('AuthTokenChanged', e => {
                     const { authToken } = e.detail;
                     console.log(`Merchant onAuthenticated listener.`);
                     // store if not blocked, else pass values along in query param if components across pages
                 });
+                emailComponent.onLogin = () => {
+                    console.log('override');
+                };
             </script>
-            <paypal-shipping></paypal-shipping>
+            <paypal-shipping>
+            </paypal-shipping>
             <paypal-payment></paypal-payment>
             <button class='continue page2'>Go to Page 2</button>
             <script>
