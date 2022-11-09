@@ -42,6 +42,11 @@
                     console.log(`Merchant onAuthenticated listener.`);
                     // store if not blocked, else pass values along in query param if components across pages
                 });
+                window.addEventListener('DOMContentLoaded', () => {
+                    emailComponent.onLogin = () => {
+                        console.log('override');
+                    };
+                });
             </script>
             <paypal-shipping>
             </paypal-shipping>
