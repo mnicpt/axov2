@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<head>
+    <title>Zoid / Web Components</title>
+    <script type="module" src="https://unpkg.com/preact@latest/hooks/dist/hooks.module.js?module"></script>
+    <script type="module" src="./ui/components/payment/index.js"></script>
+</head>
+<body>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      border: none;
+    }
+  </style>
+  <paypal-payment></paypal-payment>
+  <script>
+    this.parent.window.addEventListener('message', (e) => {
+      console.log(`Received message in frame: ${JSON.stringify(e.data)}`);
+      const data = JSON.parse(e.data);
+      if (data['auth-token'] !== null) {
+        document.querySelector('paypal-payment')['auth-token'] = data['auth-token'];
+      }
+    });
+  </script>
+</body>
+</html>

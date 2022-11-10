@@ -211,7 +211,17 @@ export const setState = (key, value) => {
 	}
 
   Object.keys(components).forEach(componentName => {
-      components[componentName].dispatchEvent(stateChangedEvent);
-			components[componentName][key] = value;
+		components[componentName].dispatchEvent(stateChangedEvent);
+		components[componentName][key] = value;
+		if (componentName === 'paypal-payment') {
+			console.log(`Sending message to frame: ${
+				JSON.stringify({
+					[key]: value
+				})
+			}`);
+			window.postMessage(JSON.stringify({
+				[key]: value
+			}));
+		}
   });
 };
