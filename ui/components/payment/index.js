@@ -7,10 +7,11 @@ import frameTemplate from "./frame_template.js";
 
 import { components, register, getState, setState } from '../util.js';
 
+const frameSrc = '/payment-frame.htm';
 const Payment = ({ authToken, compliant, styles }) => {
   return authToken
-    ? compliant === 'true' ? frameTemplate() : memberTemplate(styles || defaultStyles)
-    : compliant === 'true' ? frameTemplate() : guestTemplate(styles || defaultStyles);
+    ? compliant === 'true' ? frameTemplate({ src }) : memberTemplate(styles || defaultStyles)
+    : compliant === 'true' ? frameTemplate({ src }) : guestTemplate(styles || defaultStyles);
 };
 
 register(Payment, "paypal-payment", ["auth-token", 'compliant'], { shadow: true });
