@@ -55,6 +55,9 @@
                 document.querySelector('.continue.page2').addEventListener('click', () => {
                     location.href = 'http://localhost:8080/index2.html';
                 });
+                document.addEventListener('_preact', e => {
+                    console.log(`got it!`);
+                });
             </script>
         </div>
         <div class="zoid">

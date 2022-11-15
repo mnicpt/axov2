@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@paypal/web-component-utilities": "^1.0.0",
     "belter": "^1.0.190",
     "handlebars": "^4.7.7",
     "jsx-pragmatic": "^2.0.22",

@@ -5,9 +5,10 @@ import guestTemplate from "./guest_template.js";
 import memberTemplate from "./member_template.js";
 import frameTemplate from "./frame_template.js";
 
-import { components, register, getState, setState } from '../util.js';
+import { components, register } from "../util.js";
+import { getState, setState } from "../state.js";
 
-const frameSrc = '/payment-frame.htm';
+const src = '/payment-frame.htm';
 const Payment = ({ authToken, compliant, styles }) => {
   return authToken
     ? compliant === 'true' ? frameTemplate({ src }) : memberTemplate(styles || defaultStyles)

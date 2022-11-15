@@ -3,7 +3,8 @@ import { useEffect, useState } from 'https://unpkg.com/preact@latest/hooks/dist/
 import defaultStyles from './styles.js';
 import guestTemplate from "./guest_template.js";
 import memberTemplate from "./member_template.js";
-import { components, register, getState, setState } from '../util.js';
+import { components, register } from "../util.js";
+import { getState, setState } from "../state.js";
 
 const Email = ({ clientToken, prefilled, styles, onLogin: loginOverride }) => {
   const [ authToken, setAuthToken ] = useState(getState('auth-token') || '');

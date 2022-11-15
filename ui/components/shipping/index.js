@@ -6,7 +6,8 @@ import {
 import defaultStyles from "./styles.js";
 import guestTemplate from "./guest_template.js";
 import memberTemplate from "./member_template.js";
-import { components, register, getState, setState } from "../util.js";
+import { components, register } from "../util.js";
+import { getState, setState } from "../state.js";
 
 const Shipping = ({ authToken, styles }) => {
   return authToken

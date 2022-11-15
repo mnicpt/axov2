@@ -18,7 +18,8 @@ export const register = (Component, tagName, propNames, options) => {
 		const inst = Reflect.construct(HTMLElement, [], PreactElement);
 		_vdomComponents.set(inst, Component);
 		_shadows.set(inst, options && options.shadow ? inst.attachShadow({ mode: 'closed' }) : inst);
-    
+		// inst._root = options && options.shadow ? inst.attachShadow({ mode: 'closed' }) : inst;
+		// _shadows.set(inst, inst._root);
     components[tagName] = inst;
 		return inst;
 	}
@@ -87,7 +88,7 @@ function connectedCallback() {
 	// synchronously.
 	const event = new CustomEvent('_preact', {
 		detail: {},
-		bubbles: true,
+		bubbles: false,
 		cancelable: true,
 	});
 	this.dispatchEvent(event);
@@ -180,48 +181,3 @@ function toVdom(element, nodeName) {
 	const wrappedChildren = nodeName ? h(Slot, null, children) : children;
 	return h(nodeName || element.nodeName.toLowerCase(), props, wrappedChildren);
 }
-
-const storageAPIEnabled = () => {
-  try {
-    window.sessionStorage.setItem;
-    return true;
-  } catch(err) {
-    return false;
-  }
-};
-
-export const getState = (key) => {
-  if (storageAPIEnabled()) {
-    return window.sessionStorage.getItem(key);
-  }
-};
-
-export const setState = (key, value) => {
-	const eventName = `${key[0].toUpperCase() + key.substring(1)}Changed`;
-  const stateChangedEvent = new CustomEvent(eventName, {
-    bubbles: true,
-    cancelable: true,
-    detail: {
-      [key]: value
-    }
-  });
-	
-	if (storageAPIEnabled()) {
-		window.sessionStorage.setItem(key, value);
-	}
-
-  Object.keys(components).forEach(componentName => {
-		components[componentName].dispatchEvent(stateChangedEvent);
-		components[componentName][key] = value;
-		if (components[componentName]['compliant'] === 'true') {
-			console.log(`Sending message to frame: ${
-				JSON.stringify({
-					[key]: value
-				})
-			}`);
-			window.postMessage(JSON.stringify({
-				[key]: value
-			}));
-		}
-  });
-};
