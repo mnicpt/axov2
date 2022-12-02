@@ -88,7 +88,7 @@ function connectedCallback() {
 	// synchronously.
 	const event = new CustomEvent('_preact', {
 		detail: {},
-		bubbles: true,
+		bubbles: false,
 		cancelable: true,
 	});
 	this.dispatchEvent(event);

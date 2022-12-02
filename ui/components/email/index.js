@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'https://unpkg.com/preact@latest/hooks/dist/hooks.module.js?module';
+import { useState } from 'https://unpkg.com/preact@latest/hooks/dist/hooks.module.js?module';
 
 import defaultStyles from './styles.js';
 import guestTemplate from "./guest_template.js";
