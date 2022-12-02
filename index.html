@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <head>
     <title>Zoid / Web Components</title>
+    <script>
+        // Element.prototype._attachShadow = Element.prototype.attachShadow;
+        // Element.prototype.attachShadow = function() {
+        //     return this._attachShadow({ mode: 'open' });
+        // };
+        // Element.prototype.attachShadow.toString = () => {
+        //     return 'native';
+        // };
+    </script>
     <script type="module" src="https://unpkg.com/preact@latest/hooks/dist/hooks.module.js?module"></script>
 
     <script type="module" src="./ui/components/email/index.js"></script>
@@ -9,12 +18,6 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/zoid/9.0.87/zoid.min.js"></script>
     <script src="./zoid/session.js"></script>
-    <!-- <script>
-        Element.prototype._attachShadow = Element.prototype.attachShadow;
-        Element.prototype.attachShadow = function () {
-            return this._attachShadow( { mode: "open" } );
-        };
-    </script> -->
 
     <style>
         body {
@@ -34,19 +37,22 @@
     <div class="wrapper">
         <div class="wc">
             <h1>Web Components</h1>
-            <paypal-email prefilled='mnicpt@gmail.com'></paypal-email>
+            <paypal-email prefilled="mnicpt@gmail.com"></paypal-email>
             <script>
                 const emailComponent = document.querySelector('paypal-email');
-                emailComponent.addEventListener('AuthTokenChanged', e => {
+                emailComponent.addEventListener('OnAuth', e => {
                     const { authToken } = e.detail;
                     console.log(`Merchant onAuthenticated listener.`);
                     // store if not blocked, else pass values along in query param if components across pages
+
+                    document.querySelector('paypal-shipping')['auth-token'] = authToken;
+                    document.querySelector('paypal-payment')['auth-token'] = authToken;
                 });
-                // window.addEventListener('DOMContentLoaded', () => {
-                //     emailComponent.onLogin = () => {
-                //         console.log('override');
-                //     };
-                // });
+                emailComponent.addEventListener('OnLogout', e => {
+                    console.log(`Merchant OnLogout...`);
+                    document.querySelector('paypal-shipping')['auth-token'] = '';
+                    document.querySelector('paypal-payment')['auth-token'] = '';
+                });
             </script>
             <paypal-shipping></paypal-shipping>
             <paypal-payment compliant="true"></paypal-payment>
@@ -54,9 +60,6 @@
             <script>
                 document.querySelector('.continue.page2').addEventListener('click', () => {
                     location.href = 'http://localhost:8080/index2.html';
-                });
-                document.addEventListener('_preact', e => {
-                    console.log(`got it!`);
                 });
             </script>
         </div>

@@ -17,9 +17,10 @@
     this.parent.window.addEventListener('message', (e) => {
       console.log(`Received message in frame: ${JSON.stringify(e.data)}`);
       const data = JSON.parse(e.data);
-      if (data['auth-token'] !== null) {
-        document.querySelector('paypal-payment')['auth-token'] = data['auth-token'];
-      }
+
+      // if (data['authToken'] && data['authToken'] !== null) {
+        document.querySelector('paypal-payment')['auth-token'] = data['authToken'];
+      // }
     });
   </script>
 </body>

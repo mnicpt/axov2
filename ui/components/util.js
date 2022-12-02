@@ -9,11 +9,6 @@ const _vdomComponents = new WeakMap();
 // closure to track all registerd components
 export const components = {};
 export const register = (Component, tagName, propNames, options) => {
-	if (!isSecure()) {
-		console.error('Cannot override attachShadow when using PayPal Web Components.');
-		return;
-	}
-
 	function PreactElement() {
 		const inst = Reflect.construct(HTMLElement, [], PreactElement);
 		_vdomComponents.set(inst, Component);
@@ -81,6 +76,11 @@ function ContextProvider(props) {
 }
 
 function connectedCallback() {
+	if (!isSecure(this)) {
+		console.error('Cannot override attachShadow when using PayPal Web Components.');
+		return;
+	}
+	
 	// Obtain a reference to the previous context by pinging the nearest
 	// higher up node that was rendered with Preact. If one Preact component
 	// higher up receives our ping, it will set the `detail` property of
@@ -88,7 +88,7 @@ function connectedCallback() {
 	// synchronously.
 	const event = new CustomEvent('_preact', {
 		detail: {},
-		bubbles: false,
+		bubbles: true,
 		cancelable: true,
 	});
 	this.dispatchEvent(event);

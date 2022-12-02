@@ -5,6 +5,7 @@ import guestTemplate from "./guest_template.js";
 import memberTemplate from "./member_template.js";
 import { components, register } from "../util.js";
 import { getState, setState } from "../state.js";
+import { sendEvent } from "../event.js";
 
 const Email = ({ clientToken, prefilled, styles, onLogin: loginOverride }) => {
   const [ authToken, setAuthToken ] = useState(getState('auth-token') || '');
@@ -29,11 +30,17 @@ const Email = ({ clientToken, prefilled, styles, onLogin: loginOverride }) => {
     setAuthToken(ip);
     // global state, event, dom sync
     setState('auth-token', ip);
+    Object.keys(components).forEach(componentName => {
+      sendEvent('OnAuth', components[componentName], { authToken: ip });
+    });
   };
 
   const onLogout = () => {
     setAuthToken('');
     setState('auth-token', '');
+    Object.keys(components).forEach(componentName => {
+      sendEvent('OnLogout', components[componentName], { authToken: '' });
+    });
   };
   
   if (loading) {

@@ -6,11 +6,12 @@ import {
 import defaultStyles from "./styles.js";
 import guestTemplate from "./guest_template.js";
 import memberTemplate from "./member_template.js";
-import { components, register } from "../util.js";
-import { getState, setState } from "../state.js";
+import { register } from "../util.js";
+import { getState } from "../state.js";
 
 const Shipping = ({ authToken, styles }) => {
-  return authToken
+  const auth = authToken || getState('auth-token');
+  return auth
     ? memberTemplate(styles || defaultStyles)
     : guestTemplate(styles || defaultStyles);
 };

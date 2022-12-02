@@ -10,7 +10,9 @@ import { getState, setState } from "../state.js";
 
 const src = '/payment-frame.htm';
 const Payment = ({ authToken, compliant, styles }) => {
-  return authToken
+  const auth = authToken || getState('auth-token');
+
+  return auth
     ? compliant === 'true' ? frameTemplate({ src }) : memberTemplate(styles || defaultStyles)
     : compliant === 'true' ? frameTemplate({ src }) : guestTemplate(styles || defaultStyles);
 };
