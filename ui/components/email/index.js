@@ -13,6 +13,8 @@ const Email = ({ clientToken, prefilled, styles, onLogin: loginOverride }) => {
 
   const onEmailChange = (e) => {
     const email = e.target.value;
+    components['paypal-email'].prefilled = email;
+    
     setState('prefilled', email);
   };
 

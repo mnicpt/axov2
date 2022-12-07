@@ -4,11 +4,11 @@ const guestTemplate = ({ prefilled, onEmailChange, onLogin }, styles) => (html`
   <style>
     ${ styles }
   </style>
-  <section>
+  <section contenteditable='false'>
       <h1>Email Guest</h1>
       <input id='pp-email' type='text' placeholder='Email' onChange=${onEmailChange} value='${ prefilled }' />
       <br/>
-      <button class='continue' onClick=${onLogin}>Continue</button>
+      <button class='continue' onClick=${onLogin}>Next</button>
   </section>
 `);
 

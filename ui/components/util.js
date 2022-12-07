@@ -1,5 +1,5 @@
 import { h, cloneElement, render, hydrate } from 'https://unpkg.com/preact@latest?module';
-import { isSecure } from './security.js';
+import { isSecure, preventSecurityOverrides } from './security.js';
 
 // closures to prevent hackery
 const _shadows = new WeakMap();
@@ -31,6 +31,11 @@ export const register = (Component, tagName, propNames, options) => {
 		Object.keys(Component.propTypes || {});
 	PreactElement.observedAttributes = propNames;
 
+	// security
+	propNames.push('contentEditable');
+	propNames.push('contenteditable');
+	propNames.push('style');
+
 	// Keep DOM properties and Preact props in sync
 	propNames.forEach((name) => {
 		Object.defineProperty(PreactElement.prototype, name, {
@@ -39,6 +44,9 @@ export const register = (Component, tagName, propNames, options) => {
 				return _vdoms.get(this).props[name] || this.getAttribute(name);
 			},
 			set(v) {
+				if (name === 'contentEditable' || name === 'contenteditable' || name === 'style') {
+					return;
+				}
         console.debug(`Setting ${ name } to ${v}.`);
 				if (_vdoms.get(this)) {
 					this.attributeChangedCallback(name, null, v);
@@ -76,8 +84,9 @@ function ContextProvider(props) {
 }
 
 function connectedCallback() {
+	preventSecurityOverrides();
 	if (!isSecure(this)) {
-		console.error('Cannot override attachShadow when using PayPal Web Components.');
+		console.error('Cannot override attachShadow or attempt to access shadow DOM when using PayPal Web Components.');
 		return;
 	}
 	

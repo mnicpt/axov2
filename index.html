@@ -31,6 +31,9 @@
             display: flex;
             justify-content: space-around;
         }
+        /* paypal-email {
+            -webkit-user-modify: read-write;
+        } */
     </style>
 </head>
 <body>
@@ -54,7 +57,14 @@
                     document.querySelector('paypal-payment')['auth-token'] = '';
                 });
             </script>
-            <paypal-shipping></paypal-shipping>
+
+            <paypal-shipping client-token="clientToken"></paypal-shipping>
+            <script>
+                document.querySelector('paypal-shipping').addEventListener('OnPayPalShippingSelected', e => {
+                    const { selectedShippingAddress } = e.detail || {};
+                });
+            </script>
+
             <paypal-payment compliant="true"></paypal-payment>
             <button class='continue page2'>Go to Page 2</button>
             <script>
