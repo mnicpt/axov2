@@ -15,6 +15,7 @@
     <script type="module" src="./ui/components/email/index.js"></script>
     <script type="module" src="./ui/components/payment/index.js"></script>
     <script type="module" src="./ui/components/shipping/index.js"></script>
+    <script type="module" src="./ui/components/wps/index.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/zoid/9.0.87/zoid.min.js"></script>
     <script src="./zoid/session.js"></script>
@@ -38,6 +39,14 @@
 </head>
 <body>
     <div class="wrapper">
+        <div class="wps">
+            <paypal-button>
+                <input type="hidden" name="cmd" value="_s-xclick">
+                <input type="hidden" name="hosted_button_id" value="8QGMJBTVHYBFJ">
+                <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynowCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+                <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">  
+            </paypal-button>
+        </div>
         <div class="wc">
             <h1>Web Components</h1>
             <paypal-email prefilled="mnicpt@gmail.com"></paypal-email>
