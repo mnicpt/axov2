@@ -7,6 +7,17 @@ import { components, register } from "../util.js";
 import { getState, setState } from "../state.js";
 import { sendEvent } from "../event.js";
 
+/**
+ * PayPal Email web component
+ * @type {PayPalEmailElement}
+ *
+ * @param {string} clientToken The FAT of the merchant
+ * @param {string} prefilled The known user's email
+ * @param {string} styles Style overrides
+ * @param {Function} onLogin onLogin override
+ * 
+ * @return {PayPalEmailElement}
+ */
 const Email = ({ clientToken, prefilled, styles, onLogin: loginOverride }) => {
   const [ authToken, setAuthToken ] = useState(getState('auth-token') || '');
   const [ loading, setLoading ] = useState(false);
@@ -18,6 +29,9 @@ const Email = ({ clientToken, prefilled, styles, onLogin: loginOverride }) => {
     setState('prefilled', email);
   };
 
+  /**
+   * onLogin
+   */
   const onLogin = loginOverride
     ? loginOverride
     : async () => {

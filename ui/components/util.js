@@ -8,6 +8,7 @@ const _vdomComponents = new WeakMap();
 
 // closure to track all registerd components
 export const components = {};
+window.components = components;
 export const register = (Component, tagName, propNames, options) => {
 	function PreactElement() {
 		const inst = Reflect.construct(HTMLElement, [], PreactElement);
@@ -51,6 +52,7 @@ export const register = (Component, tagName, propNames, options) => {
 				if (_vdoms.get(this)) {
 					this.attributeChangedCallback(name, null, v);
 				} else {
+					console.debug(`VDOM doesn't exist yet. Setting ${ name } to ${v}.`);
 					if (!this._props) this._props = {};
 					this._props[name] = v;
 					this.connectedCallback();
@@ -70,6 +72,7 @@ export const register = (Component, tagName, propNames, options) => {
 		});
 	});
   
+	console.debug(`Creating web component, ${ tagName } from Preact component.`);
 	return customElements.define(
 		tagName || Component.tagName || Component.displayName || Component.name,
 		PreactElement
@@ -84,6 +87,7 @@ function ContextProvider(props) {
 }
 
 function connectedCallback() {
+	console.debug('connectedCallback...');
 	preventSecurityOverrides();
 	if (!isSecure(this)) {
 		console.error('Cannot override attachShadow or attempt to access shadow DOM when using PayPal Web Components.');
@@ -117,6 +121,7 @@ function toCamelCase(str) {
 }
 
 function attributeChangedCallback(name, oldValue, newValue) {
+	console.debug(`attributeChangedCallback...${oldValue} to ${newValue}`);
 	if (!_vdoms.get(this)) return;
 	// Attributes use `null` as an empty value whereas `undefined` is more
 	// common in pure JS components, especially with default parameters.
@@ -132,6 +137,7 @@ function attributeChangedCallback(name, oldValue, newValue) {
 }
 
 function disconnectedCallback() {
+	console.debug('disconnectedCallback...');
 	render((_vdoms.set(this, null)), _shadows.get(this));
 }
 
@@ -161,6 +167,7 @@ function Slot(props, context) {
 }
 
 function toVdom(element, nodeName) {
+	console.debug('toVdom...');
 	if (element.nodeType === 3) return element.data;
 	if (element.nodeType !== 1) return null;
 	let children = [],
@@ -186,7 +193,5 @@ function toVdom(element, nodeName) {
 		}
 	}
 
-	// Only wrap the topmost node with a slot
-	const wrappedChildren = children; //nodeName ? h(Slot, null, children) : children;
-	return h(nodeName || element.nodeName.toLowerCase(), props, wrappedChildren);
+	return h(nodeName || element.nodeName.toLowerCase(), props, children);
 }

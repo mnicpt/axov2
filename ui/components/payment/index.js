@@ -11,7 +11,7 @@ import { getState, setState } from "../state.js";
 const src = '/payment-frame.htm';
 const Payment = ({ authToken, compliant, styles }) => {
   const auth = authToken || getState('auth-token');
-
+  console.log(`compliant: ${compliant}, authToken: ${authToken}, auth: ${auth}`);
   return auth
     ? compliant === 'true' ? frameTemplate({ src }) : memberTemplate(styles || defaultStyles)
     : compliant === 'true' ? frameTemplate({ src }) : guestTemplate(styles || defaultStyles);

@@ -12,11 +12,15 @@
     </script>
     <script type="module" src="https://unpkg.com/preact@latest/hooks/dist/hooks.module.js?module"></script>
 
-    <script type="module" src="./ui/components/email/index.js"></script>
-    <script type="module" src="./ui/components/payment/index.js"></script>
-    <script type="module" src="./ui/components/shipping/index.js"></script>
+    
     <script type="module" src="./ui/components/wps/index.js"></script>
+    <!-- <script>
+        const emailElement = document.createElement('script');
+        emailElement.src = './ui/components/email/index.js';
+        emailElement.type = 'module';
 
+        document.head.appendChild(emailElement);
+    </script> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/zoid/9.0.87/zoid.min.js"></script>
     <script src="./zoid/session.js"></script>
 
@@ -64,7 +68,12 @@
                     console.log(`Merchant OnLogout...`);
                     document.querySelector('paypal-shipping')['auth-token'] = '';
                     document.querySelector('paypal-payment')['auth-token'] = '';
-                });
+                });  
+                // window.addEventListener('DOMContentLoaded', () => {
+                //     emailComponent.onLogin = () => {
+                //         console.log(`Overridden...`);
+                //     };
+                // });
             </script>
 
             <paypal-shipping client-token="clientToken"></paypal-shipping>
@@ -101,5 +110,8 @@
             </script>
         </div>
     </div>
+    <script type="module" src="./ui/components/email/index.js"></script>
+    <script type="module" src="./ui/components/payment/index.js"></script>
+    <script type="module" src="./ui/components/shipping/index.js"></script>
 </body>
 </html>
